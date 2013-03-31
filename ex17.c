@@ -51,6 +51,7 @@ void Database_load(struct Connection *conn) {
 
 	rc = fread(&db->size, sizeof(int), 1, conn->file);
 	if (rc != 1) die(conn, "Failed to load database");
+
 	rc = fread(&db->max_len, sizeof(int), 1, conn->file);
 	if (rc != 1) die(conn, "Failed to load database");
 
@@ -59,15 +60,18 @@ void Database_load(struct Connection *conn) {
 	for (int i = 0; i < db->size; i++) {
 		struct Address *addr = &db->rows[i];
 
-		addr->id = i;
+		rc = fread(&addr->id, sizeof(int), 1, conn->file);
+		if (rc != 1) die(conn, "Failed to load database");
 
 		rc = fread(&addr->set, sizeof(bool), 1, conn->file);
 		if (rc != 1) die(conn, "Failed to load database");
 
 		if (addr->set) {
+			addr->name = calloc(db->max_len, sizeof(char));
 			rc = fread(addr->name, sizeof(char), db->max_len, conn->file);
 			if (rc != db->max_len) die(conn, "Failed to load database");
 
+			addr->email = calloc(db->max_len, sizeof(char));
 			rc = fread(addr->email, sizeof(char), db->max_len, conn->file);
 			if (rc != db->max_len) die(conn, "Failed to load database");
 		}
