@@ -1,4 +1,5 @@
 /*.dSYM/
+/*.o
 /ex1
 /ex2
 /ex3
@@ -17,7 +18,8 @@
 /ex16
 /ex16-stack
 /ex17
+/ex18
+/ex19
 /*.db.*
 /stack
 /tags
-/ex18
